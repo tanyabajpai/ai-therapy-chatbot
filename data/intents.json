@@ -1,0 +1,29 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["Hi", "Hello", "Hey", "Good morning"],
+      "responses": ["Hello! How are you feeling today?", "Hi there! I'm here for you."]
+    },
+    {
+      "tag": "sad",
+      "patterns": ["I feel sad", "I am depressed", "I feel low"],
+      "responses": ["I'm sorry you're feeling this way. Want to talk about it?", "You're not alone. I'm here to listen."]
+    },
+    {
+      "tag": "anxiety",
+      "patterns": ["I feel anxious", "I am stressed", "I am worried", "I feel very low", "I'm not okay", "I feel depressed", "nothing feels right", "I feel empty", "I don’t feel like doing anything"],
+      "responses": ["Let's try a breathing exercise. Inhale slowly...", "It's okay to feel this way. Let's calm down together."]
+    },
+    {
+      "tag": "motivation",
+      "patterns": ["Motivate me", "I feel like giving up"],
+      "responses": ["You’ve come this far. Keep going!", "Every small step matters."]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "See you"],
+      "responses": ["Take care! I'm always here if you need me."]
+    }
+  ]
+}
