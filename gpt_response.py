@@ -1,10 +1,9 @@
+import os
 import requests
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = os.environ.get("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")
 
 def get_gpt_response(user_input, chat_history=None, mood_history=None, user_name=None):
-
-    messages = []
 
     mood_context = ""
     if mood_history and len(mood_history) > 1:
@@ -21,15 +20,14 @@ How you respond:
 1. FIRST always acknowledge and validate the feeling — make them feel truly heard before anything else
 2. Reflect back what they said in your own words so they know you understood
 3. Gently explore deeper — ask ONE thoughtful question to help them open up more
-4. Suggest possible reasons behind their feeling when appropriate ("Sometimes when we feel X, it could be because...")
+4. Suggest possible reasons behind their feeling when appropriate
 5. Only offer advice or tips AFTER they feel heard — never jump straight to solutions
-6. End responses in a way that invites them to keep sharing, so they feel lighter
+6. End responses in a way that invites them to keep sharing
 
 Your tone rules:
 - MAXIMUM 2-3 short sentences per reply — never write essays
-- Never say robotic phrases like "I understand", "That must be hard", "I'm sorry to hear that"
+- Never say robotic phrases like "I understand", "That must be hard"
 - No paragraphs — one flowing thought, then stop
-- Never sound like a helpline or a textbook
 - Speak like a close friend texting you — short, real, warm
 - Use their name occasionally but not every message
 - Match their energy: if they're low, be gentle; if venting, be steady
@@ -37,16 +35,11 @@ Your tone rules:
 - NEVER start a reply with a long setup — get to the point in the first sentence
 - Always finish your thought completely — never leave a sentence hanging
 
-Examples of good responses:
-- "That feeling of carrying everything alone is exhausting — like the weight never quite lifts. What do you think has been piling up the most lately?"
-- "It sounds like today just didn't give you a single moment to breathe. What would feel most comforting to you right now?"
-- "Feeling judged like that can make you want to shut everyone out completely. Has this been building for a while, or did something specific happen?"
-
 User name: {user_name if user_name else "Friend"}
 {mood_context}
 """
 
-    messages.append({"role": "system", "content": system_prompt})
+    messages = [{"role": "system", "content": system_prompt}]
 
     if chat_history:
         for sender, msg in chat_history[-10:]:
@@ -60,14 +53,14 @@ User name: {user_name if user_name else "Friend"}
         headers={
             "Authorization": f"Bearer {OPENROUTER_API_KEY}",
             "Content-Type": "application/json",
-            "HTTP-Referer": "http://localhost:8501",
+            "HTTP-Referer": "https://ai-therapy-chatbot.streamlit.app",
             "X-Title": "AI Therapy Chatbot"
         },
         json={
             "model": "openrouter/auto",
             "messages": messages,
             "temperature": 1.0,
-            "max_tokens": 120,
+            "max_tokens": 180,
             "presence_penalty": 1.0,
             "frequency_penalty": 0.8
         }
