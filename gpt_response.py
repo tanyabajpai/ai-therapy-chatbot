@@ -1,7 +1,7 @@
 import os
 import requests
 
-OPENROUTER_API_KEY = os.environ.get("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")
+OPENROUTER_API_KEY = ("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")
 
 def get_gpt_response(user_input, chat_history=None, mood_history=None, user_name=None):
 
