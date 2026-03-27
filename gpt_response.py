@@ -55,4 +55,7 @@ User name: {user_name if user_name else "Friend"}
     if "error" in data:
         raise Exception(f"OpenRouter error: {data['error']}")
 
-    return data["choices"][0]["message"]["content"].strip()
+    content = data["choices"][0]["message"]["content"]
+if not content:
+    return "That's really interesting — tell me more about it?"
+return content.strip()
