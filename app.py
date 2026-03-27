@@ -70,13 +70,3 @@ if st.session_state.mood_history:
     df = pd.DataFrame({"Message": range(1, len(mood_values) + 1), "Mood": mood_values})
     st.subheader("📊 Mood Tracking Over Time")
     st.line_chart(df.set_index("Message"))
-```
-
----
-
-## Step 3 — Deploy on Streamlit Cloud
-1. Go to **[share.streamlit.io](https://share.streamlit.io)** → **"New app"**
-2. Select your new repo, branch `main`, file `app.py`
-3. Click **"Advanced settings"** → Python **3.11** → Secrets:
-```
-OPENROUTER_API_KEY = "your-fresh-openrouter-key-here"
