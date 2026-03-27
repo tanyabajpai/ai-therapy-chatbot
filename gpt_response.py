@@ -42,7 +42,7 @@ User name: {user_name if user_name else "Friend"}
             "X-Title": "AI Therapy Chatbot"
         },
         json={
-            "model": "deepseek/deepseek-chat-v3-0324:free",
+            "model": "openrouter/free",
             "messages": messages,
             "temperature": 1.0,
             "max_tokens": 180,
