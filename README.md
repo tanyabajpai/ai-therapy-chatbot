@@ -6,7 +6,7 @@ An emotionally intelligent AI chatbot that provides supportive conversations, de
 
 ## 🚀 Live Demo
 
-🔗[ [https://ai-therapy-chatbot-1403.streamlit.app](https://ai-therapy-chatbot-1403.streamlit.app/)
+🔗[https://ai-therapy-chatbot-1403.streamlit.app](https://ai-therapy-chatbot-1403.streamlit.app/)
 
 ---
 
