@@ -1,7 +1,3 @@
 streamlit
 requests
-<<<<<<< HEAD
 pandas
-=======
-pandas
->>>>>>> 15c09b086265103bf3e2fa842e290f13a4df3506

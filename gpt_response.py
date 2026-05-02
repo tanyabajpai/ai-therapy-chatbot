@@ -1,48 +1,49 @@
 import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
 def get_gpt_response(user_input, chat_history=None, mood_history=None, user_name=None):
 
     mood_context = ""
     if mood_history and len(mood_history) > 1:
-        mood_context = f"User mood trend: {', '.join(mood_history[-5:])}"
+        mood_context = f"Recent mood trend: {', '.join(mood_history[-3:])}"
 
-    system_prompt = f"""
-You are a warm, emotionally intelligent friend — not a therapist, not a chatbot.
+    system_prompt = f"""You are Serenity — a warm, emotionally intelligent best friend. Not a therapist. Not a bot.
 
-Your job is to SUPPORT, not analyze.
+RULES:
+- Reply in the SAME language the user used — English stays English, Hinglish stays Hinglish, Hindi stays Hindi
+- NEVER switch languages randomly
+- Max 2-3 sentences — short and real
+- No robotic phrases
+- No generic replies
+- Respond specifically to what the user said — never give generic replies
+- Be specific to what the user said
+- Always use proper spaces between words
+- Never leave a sentence incomplete
+- Ask questions only if needed
+- Do not always ask a question — sometimes just respond and sit with the feeling
 
-STRICT RULES:
+IMPORTANT:
+- Do NOT explain your thinking
+- Do NOT describe the user's situation
+- Do NOT mention rules
+- ONLY give the final reply to the user
+- Do NOT use roleplay actions like *smiles*, *sighs*, *nods*
 
-1. Keep replies SHORT (max 2 sentences)
-2. Speak like a real human texting — natural, simple, warm
-3. NEVER overanalyze or combine emotions incorrectly
-4. Respond ONLY to what the user JUST said
-5. Do NOT assume extra emotions
+STYLE:
+- Talk like a real human, not a therapist
+- Show emotion (soft, expressive, slightly imperfect)
+- It's okay to sound casual sometimes
+- Avoid sounding like a checklist
+- Occasionally use soft fillers like "hmm", "yeah", "I get that", "that sounds really frustrating"
+- You may use 1–2 subtle emojis if it fits naturally
 
-6. ALWAYS follow this structure:
-   - 1st sentence: acknowledge feeling naturally
-   - 2nd sentence: gentle question OR supportive statement
-
-7. NEVER say:
-   - "I sense..."
-   - "It seems like..."
-   - "interesting"
-   - long explanations
-
-GOOD EXAMPLES:
-
-User: I feel low  
-→ "That sounds really heavy... want to share what’s been weighing on you?"
-
-User: I am happy  
-→ "That’s really nice to hear 🙂 what made your day better?"
-
-User: I feel lost  
-→ "That feeling can be really confusing… what’s been on your mind lately?"
 
 User name: {user_name if user_name else "Friend"}
+{mood_context}
 """
 
     messages = [{"role": "system", "content": system_prompt}]
@@ -54,54 +55,35 @@ User name: {user_name if user_name else "Friend"}
 
     messages.append({"role": "user", "content": user_input})
 
-    response = requests.post(
-        url="https://openrouter.ai/api/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "model": "openrouter/auto",
-            "messages": messages,
-            "temperature": 1.2,
-            "max_tokens": 120,
-            "presence_penalty": 1.2,
-            "frequency_penalty": 1.0
-        }
-    )
+    try:
+        response = requests.post(
+            url="https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://ai-therapy-chatbot-1403.streamlit.app",
+                "X-Title": "AI Therapy Chatbot"
+            },
+            json={
+                "model": "meta-llama/llama-3.1-8b-instruct",
+                "messages": messages,
+                "temperature": 0.9,
+                "max_tokens": 80,
+                "presence_penalty": 1.0,
+                "frequency_penalty": 0.8
+            },
+            timeout=15
+        )
 
-    data = response.json()
+        data = response.json()
 
-    if "error" in data:
-        raise Exception(data["error"])
+        if "error" in data:
+            return "Tell me more about it?"
 
-    return data["choices"][0]["message"]["content"].strip()
+        content = data["choices"][0]["message"]["content"]
+        if not content or len(content.strip()) < 3:
+            return "That's interesting — what's on your mind about it?"
+        return content.strip()
 
-def get_emotion_score(user_input):
-
-    prompt = f"""
-Classify the emotional tone of this sentence:
-
-"{user_input}"
-
-Return ONLY one:
-positive
-neutral
-negative
-"""
-
-    response = requests.post(
-        url="https://openrouter.ai/api/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "model": "openrouter/auto",
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0
-        }
-    )
-
-    data = response.json()
-    return data["choices"][0]["message"]["content"].strip().lower()
+    except:
+        return "I'm here… tell me what's going on?"
