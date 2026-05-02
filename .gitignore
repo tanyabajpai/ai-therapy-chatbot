@@ -213,3 +213,4 @@ models/
 reports/
 .streamlit/
 *.pyc
+.env
