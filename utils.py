@@ -1,9 +1,14 @@
 def is_crisis(text):
+<<<<<<< HEAD
     crisis_words = ["suicide", "kill myself", "end my life", "die"]
+=======
+    crisis_words = ["suicide", "kill myself", "end my life", "want to die", "hurt myself"]
+>>>>>>> 15c09b086265103bf3e2fa842e290f13a4df3506
     for word in crisis_words:
         if word in text.lower():
             return True
     return False
+<<<<<<< HEAD
 
 def detect_emotion_keywords(text):
     text = text.lower()
@@ -16,3 +21,5 @@ def detect_emotion_keywords(text):
         return "loneliness"
 
     return None
+=======
+>>>>>>> 15c09b086265103bf3e2fa842e290f13a4df3506
