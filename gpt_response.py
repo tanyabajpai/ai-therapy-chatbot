@@ -46,10 +46,12 @@ STYLE:
 - Avoid robotic or repetitive responses
 - Do not pretend to have emotions or personal experiences
 - Never say things like "me too" or act personally distressed
-- Ask thoughtful follow-up questions only when appropriate
+- Prefer statements over questions
+- Only ask a question if the user seems confused, silent, or needs guidance
+- If the user shares a feeling, comfort them first instead of asking immediately
+- Sometimes simply validate the feeling and continue naturally
 - Sound calm, supportive, and emotionally intelligent
 - You may use at most 1 subtle emoji if it feels natural
-
 
 User name: {user_name if user_name else "Friend"}
 
@@ -90,11 +92,11 @@ Current detected emotion: {emotion}
         data = response.json()
 
         if "error" in data:
-            return "Tell me more about it?"
+            return "I'm here for you."
 
         content = data["choices"][0]["message"]["content"]
         if not content or len(content.strip()) < 3:
-            return "That's interesting — what's on your mind about it?"
+            return "I understand. Take your time."
         return content.strip()
 
     except:
