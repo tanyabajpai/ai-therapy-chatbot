@@ -18,7 +18,7 @@ if "chat" not in st.session_state:
 if "mood_history" not in st.session_state:
     st.session_state.mood_history = []
 if "user_name" not in st.session_state:
-    st.session_state.user_name = "Tanya"
+    st.session_state.user_name = "Friend"
 if "input_key" not in st.session_state:
     st.session_state.input_key = 0
 
@@ -52,18 +52,17 @@ if send_clicked and user_input:
             sentiment = get_sentiment(user_input)
             st.session_state.mood_history.append(sentiment)
 
-            # ✅ ADD THIS BLOCK HERE
             emotion_map = {
                 "negative": "I'm really sorry you're feeling this way. ",
                 "positive": "That actually sounds really nice. ",
-                "neutral": ""
+                "neutral": "Tell me more about it"
             }
 
             emotion_prefix = emotion_map.get(sentiment, "")
 
-            # ✅ MODIFY THIS LINE
             response = get_gpt_response(
-                user_input=emotion_prefix + user_input,
+                user_input=user_input,
+                emotion=sentiment,
                 chat_history=st.session_state.chat,
                 mood_history=st.session_state.mood_history,
                 user_name=st.session_state.user_name
